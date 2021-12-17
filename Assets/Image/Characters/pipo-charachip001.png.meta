@@ -4,7 +4,7 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 3590796735190235691
-    second: pipo-charachip001_0
+    second: pipo-charachip002_0
   - first:
       213: 2029657367584970431
     second: pipo-charachip001_1
@@ -151,15 +151,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pipo-charachip001_0
+      name: pipo-charachip002_0
       rect:
         serializedVersion: 2
         x: 0
         y: 96
         width: 32
         height: 32
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

@@ -18,8 +18,10 @@ public class Player : MonoBehaviour
 
     Coroutine _moveCoroutine;
     [SerializeField] Vector3Int _pos;
-    
-    [SerializeField] Direction _currentDir  = Direction.Down;
+
+    private Vector3 playerPivot = new Vector3(0.16f, 0.16f, 0.0f); //スプライトスライス時に中心からずれたピボット分の値
+
+    [SerializeField] Direction _currentDir = Direction.Down;
     public Direction CurrentDir
     {
         get => _currentDir;
@@ -41,34 +43,34 @@ public class Player : MonoBehaviour
             CurrentDir = move.y > 0 ? Direction.Up : Direction.Down;
         }
     }
- 
+
     Animator Animator { get => GetComponent<Animator>(); }
     static readonly string TRIGGER_MoveDown = "MoveDownTrigger";
     static readonly string TRIGGER_MoveLeft = "MoveLeftTrigger";
     static readonly string TRIGGER_MoveRight = "MoveRightTrigger";
     static readonly string TRIGGER_MoveUp = "MoveUpTrigger";
- 
+
     void SetDirAnimation(Direction dir)
     {
         if (Animator == null || Animator.runtimeAnimatorController == null) return;
- 
+
         string triggerName = null;
         switch (dir)
         {
-            case Direction.Up:    triggerName = TRIGGER_MoveUp; break;
-            case Direction.Down:  triggerName = TRIGGER_MoveDown; break;
-            case Direction.Left:  triggerName = TRIGGER_MoveLeft; break;
+            case Direction.Up: triggerName = TRIGGER_MoveUp; break;
+            case Direction.Down: triggerName = TRIGGER_MoveDown; break;
+            case Direction.Left: triggerName = TRIGGER_MoveLeft; break;
             case Direction.Right: triggerName = TRIGGER_MoveRight; break;
-            default:              throw new System.NotImplementedException("");
+            default: throw new System.NotImplementedException("");
         }
         Animator.SetTrigger(triggerName);
     }
- 
+
     private void Awake()
     {
         SetDirAnimation(_currentDir);
     }
-    
+
     public Vector3Int Pos
     {
         get => _pos;
@@ -96,7 +98,7 @@ public class Player : MonoBehaviour
     {
         _pos = pos;
         transform.position = RPGSceneManager.ActiveMap.Grid.CellToWorld(pos);
-        Camera.main.transform.position = transform.position + Vector3.forward * -10;
+        Camera.main.transform.position = transform.position + Vector3.forward * -10 + playerPivot;
     }
     public bool IsMoving { get => _moveCoroutine != null; }
 
@@ -110,10 +112,11 @@ public class Player : MonoBehaviour
             yield return null;
             t += Time.deltaTime;
             transform.position = Vector3.Lerp(startPos, goalPos, t / MoveSecond);
-            Camera.main.transform.position = transform.position + Vector3.forward * -10;
+            Camera.main.transform.position = transform.position + Vector3.forward * -10 + playerPivot;
         }
         _pos = pos;
         _moveCoroutine = null;
+
     }
 
     private void Start()

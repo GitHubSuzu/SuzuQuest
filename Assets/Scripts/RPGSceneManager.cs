@@ -1,4 +1,3 @@
-//RPGSceneManager.cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,17 +17,22 @@ public class RPGSceneManager : MonoBehaviour
 
     IEnumerator MovePlayer()
     {
-        while(true)
+        while (true)
         {
             if (GetArrowInput(out var move))
             {
                 var movedPos = Player.Pos + move;
                 var massData = ActiveMap.GetMassData(movedPos);
                 Player.SetDir(move);
-                if(massData.isMovable)
+                if (massData.isMovable)
                 {
                     Player.Pos = movedPos;
                     yield return new WaitWhile(() => Player.IsMoving);
+
+                    if (massData.massEvent != null)
+                    {
+                        massData.massEvent.Exec(this);
+                    }
                 }
             }
             yield return null;
