@@ -21,15 +21,15 @@ public class RPGSceneManager : MonoBehaviour
         {
             if (GetArrowInput(out var move))
             {
-                var movedPos = Player.Pos + move;
+                var movedPos = Player.Pos + move; //現在地にmoveを加算
                 var massData = ActiveMap.GetMassData(movedPos);
-                Player.SetDir(move);
-                if (massData.isMovable)
+                Player.SetDir(move);////引数の値によって向きを変更
+                if (massData.isMovable)//動けるのなら(isMovableがtrue)
                 {
-                    Player.Pos = movedPos;
-                    yield return new WaitWhile(() => Player.IsMoving);
+                    Player.Pos = movedPos;//プレイヤーの位置をmovedPosにする
+                    yield return new WaitWhile(() => Player.IsMoving);//yield return new WaitWhile(条件) : 条件がfalseで再開
 
-                    if (massData.massEvent != null)
+                    if (massData.massEvent != null)//nullじゃなかったら呼び出す
                     {
                         massData.massEvent.Exec(this);
                     }
@@ -39,6 +39,8 @@ public class RPGSceneManager : MonoBehaviour
         }
     }
 
+    //out を付けた引数で指定した変数はメソッド内で必ず結果が入る
+    //boolで方向キーの入力があった場合は値を返す,それ以外はfalse
     bool GetArrowInput(out Vector3Int move)
     {
         var doMove = false;

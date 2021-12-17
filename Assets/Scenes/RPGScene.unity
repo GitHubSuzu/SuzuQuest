@@ -321,6 +321,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1052574600191299052, guid: 6108a033ff226d54888dca094825c44b, type: 3}
+      propertyPath: m_CellGap.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052574600191299052, guid: 6108a033ff226d54888dca094825c44b, type: 3}
+      propertyPath: m_CellGap.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1052574600191299053, guid: 6108a033ff226d54888dca094825c44b, type: 3}
       propertyPath: m_Name
       value: FieldMap

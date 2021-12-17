@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MoveFieldMapChip
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: -181219940168233198, guid: 7fff50d9c02b678498ab48d4774791b8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.016897917, a: 1}
   m_Transform:
     e00: 1
     e01: 0
