@@ -8,7 +8,7 @@ public class Map : MonoBehaviour
     public Grid Grid { get => GetComponent<Grid>(); }
     Dictionary<string, Tilemap> _tilemaps;
 
-    readonly static string BACKGROND_TILEMAP_NAME = "Background";
+    readonly static string BACKGROND_TILEMAP_NAME = "BackGround";
     readonly static string NONE_OBJECTS_TILEMAP_NAME = "NoneObjects";
     readonly static string OBJECTS_TILEMAP_NAME = "Objects";
     readonly static string EVENT_BOX_TILEMAP_NAME = "EventBox";
@@ -64,7 +64,7 @@ public class Map : MonoBehaviour
         var mass = new Mass();
         mass.eventTile = _tilemaps[EVENT_BOX_TILEMAP_NAME].GetTile(pos);
         mass.isMovable = true;
-
+        
         if (mass.eventTile != null)
         {
             mass.massEvent = FindMassEvent(mass.eventTile);
