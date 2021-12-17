@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Direction
+{
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
 public class Player : MonoBehaviour
 {
     [Range(0, 2)] public float MoveSecond = 0.1f;
@@ -10,6 +18,57 @@ public class Player : MonoBehaviour
 
     Coroutine _moveCoroutine;
     [SerializeField] Vector3Int _pos;
+    
+    [SerializeField] Direction _currentDir  = Direction.Down;
+    public Direction CurrentDir
+    {
+        get => _currentDir;
+        set
+        {
+            if (_currentDir == value) return;
+            _currentDir = value;
+            SetDirAnimation(value);
+        }
+    }
+    public void SetDir(Vector3Int move)
+    {
+        if (Mathf.Abs(move.x) > Mathf.Abs(move.y))
+        {
+            CurrentDir = move.x > 0 ? Direction.Right : Direction.Left;
+        }
+        else
+        {
+            CurrentDir = move.y > 0 ? Direction.Up : Direction.Down;
+        }
+    }
+ 
+    Animator Animator { get => GetComponent<Animator>(); }
+    static readonly string TRIGGER_MoveDown = "MoveDownTrigger";
+    static readonly string TRIGGER_MoveLeft = "MoveLeftTrigger";
+    static readonly string TRIGGER_MoveRight = "MoveRightTrigger";
+    static readonly string TRIGGER_MoveUp = "MoveUpTrigger";
+ 
+    void SetDirAnimation(Direction dir)
+    {
+        if (Animator == null || Animator.runtimeAnimatorController == null) return;
+ 
+        string triggerName = null;
+        switch (dir)
+        {
+            case Direction.Up:    triggerName = TRIGGER_MoveUp; break;
+            case Direction.Down:  triggerName = TRIGGER_MoveDown; break;
+            case Direction.Left:  triggerName = TRIGGER_MoveLeft; break;
+            case Direction.Right: triggerName = TRIGGER_MoveRight; break;
+            default:              throw new System.NotImplementedException("");
+        }
+        Animator.SetTrigger(triggerName);
+    }
+ 
+    private void Awake()
+    {
+        SetDirAnimation(_currentDir);
+    }
+    
     public Vector3Int Pos
     {
         get => _pos;

@@ -24,6 +24,7 @@ public class RPGSceneManager : MonoBehaviour
             {
                 var movedPos = Player.Pos + move;
                 var massData = ActiveMap.GetMassData(movedPos);
+                Player.SetDir(move);
                 if(massData.isMovable)
                 {
                     Player.Pos = movedPos;
