@@ -41,6 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BackGround
+    uniqueID: 1485557491
+    locked: 0
+  - name: NoneObjects
+    uniqueID: 1210433477
+    locked: 0
+  - name: Objects
+    uniqueID: 3358591159
+    locked: 0
+  - name: EventBox
+    uniqueID: 2760539935
+    locked: 0
   - name: Player
     uniqueID: 2700073535
     locked: 0

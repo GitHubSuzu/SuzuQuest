@@ -40,7 +40,6 @@ public class RPGSceneManager : MonoBehaviour
         move = Vector3Int.zero;
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            Debug.Log(1);
             move.x -= 1; doMove = true;
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
