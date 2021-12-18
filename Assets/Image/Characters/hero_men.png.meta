@@ -1,43 +1,43 @@
 fileFormatVersion: 2
-guid: a73c55914f7180d42a80b28b0dc358ca
+guid: ffc9f93f95bf04241a90faec3adbf009
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3590796735190235691
-    second: pipo-charachip002_0
+      213: -8706640674112917409
+    second: hero_men_0
   - first:
-      213: 2029657367584970431
-    second: pipo-charachip001_1
+      213: -1418271976318823002
+    second: hero_men_1
   - first:
-      213: -1040940826616239196
-    second: pipo-charachip001_2
+      213: 665868771313212705
+    second: hero_men_2
   - first:
-      213: 5312897540699203978
-    second: pipo-charachip001_3
+      213: -4713423050263462944
+    second: hero_men_3
   - first:
-      213: 672347052449474498
-    second: pipo-charachip001_4
+      213: 1858107443977876017
+    second: hero_men_4
   - first:
-      213: -4747768239549644068
-    second: pipo-charachip001_5
+      213: -5373940912655327268
+    second: hero_men_5
   - first:
-      213: 8916445763418302712
-    second: pipo-charachip001_6
+      213: -5588381969255600420
+    second: hero_men_6
   - first:
-      213: 1377421862904102290
-    second: pipo-charachip001_7
+      213: -3253483486013767902
+    second: hero_men_7
   - first:
-      213: 1958428256707548479
-    second: pipo-charachip001_8
+      213: 8538327263816299669
+    second: hero_men_8
   - first:
-      213: -8595818819502010164
-    second: pipo-charachip001_9
+      213: 8108440501476815616
+    second: hero_men_9
   - first:
-      213: -5335766010671479948
-    second: pipo-charachip001_10
+      213: -3836675403844416795
+    second: hero_men_10
   - first:
-      213: 4117176464692000762
-    second: pipo-charachip001_11
+      213: 8040386932045093041
+    second: hero_men_11
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -151,28 +151,28 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pipo-charachip002_0
+      name: hero_men_0
       rect:
         serializedVersion: 2
         x: 0
         y: 96
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b2a75a51b9215d130800000000000000
-      internalID: 3590796735190235691
+      spriteID: f503888cf6ccb2780800000000000000
+      internalID: -8706640674112917409
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_1
+      name: hero_men_1
       rect:
         serializedVersion: 2
         x: 32
@@ -186,14 +186,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fb618aa4f9aca2c10800000000000000
-      internalID: 2029657367584970431
+      spriteID: 6a510a0e629415ce0800000000000000
+      internalID: -1418271976318823002
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_2
+      name: hero_men_2
       rect:
         serializedVersion: 2
         x: 64
@@ -207,14 +207,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4ab665555d5dd81f0800000000000000
-      internalID: -1040940826616239196
+      spriteID: 12d562d9e14ad3900800000000000000
+      internalID: 665868771313212705
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_3
+      name: hero_men_3
       rect:
         serializedVersion: 2
         x: 0
@@ -228,14 +228,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a892c611a243bb940800000000000000
-      internalID: 5312897540699203978
+      spriteID: 0eb78e465be869eb0800000000000000
+      internalID: -4713423050263462944
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_4
+      name: hero_men_4
       rect:
         serializedVersion: 2
         x: 32
@@ -249,14 +249,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c7280bf418a45900800000000000000
-      internalID: 672347052449474498
+      spriteID: 1327fc820e259c910800000000000000
+      internalID: 1858107443977876017
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_5
+      name: hero_men_5
       rect:
         serializedVersion: 2
         x: 64
@@ -270,14 +270,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cd203cdd0f98c1eb0800000000000000
-      internalID: -4747768239549644068
+      spriteID: cdf9d39563deb65b0800000000000000
+      internalID: -5373940912655327268
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_6
+      name: hero_men_6
       rect:
         serializedVersion: 2
         x: 0
@@ -291,14 +291,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f8a5933e249dbb70800000000000000
-      internalID: 8916445763418302712
+      spriteID: cde625d15341272b0800000000000000
+      internalID: -5588381969255600420
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_7
+      name: hero_men_7
       rect:
         serializedVersion: 2
         x: 32
@@ -312,14 +312,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 29d714ce2e59d1310800000000000000
-      internalID: 1377421862904102290
+      spriteID: 22fbc85d10e49d2d0800000000000000
+      internalID: -3253483486013767902
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_8
+      name: hero_men_8
       rect:
         serializedVersion: 2
         x: 64
@@ -333,14 +333,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f35142f8f1cbd2b10800000000000000
-      internalID: 1958428256707548479
+      spriteID: 594bdcf886b3e7670800000000000000
+      internalID: 8538327263816299669
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_9
+      name: hero_men_9
       rect:
         serializedVersion: 2
         x: 0
@@ -354,14 +354,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cc017f5835485b880800000000000000
-      internalID: -8595818819502010164
+      spriteID: 0037aecfca7f68070800000000000000
+      internalID: 8108440501476815616
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_10
+      name: hero_men_10
       rect:
         serializedVersion: 2
         x: 32
@@ -375,14 +375,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 473c259551d83f5b0800000000000000
-      internalID: -5335766010671479948
+      spriteID: 5ea006b3c0461cac0800000000000000
+      internalID: -3836675403844416795
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pipo-charachip001_11
+      name: hero_men_11
       rect:
         serializedVersion: 2
         x: 64
@@ -396,8 +396,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af7b09f4e26232930800000000000000
-      internalID: 4117176464692000762
+      spriteID: 1b89d3d9051359f60800000000000000
+      internalID: 8040386932045093041
       vertices: []
       indices: 
       edges: []

@@ -13,6 +13,7 @@ public class MoveMapEvent : MassEvent
     public override void Exec(RPGSceneManager manager)
     {
         Destroy(manager.ActiveMap.gameObject);
+        Debug.Log("マップ生成");
         manager.ActiveMap = Instantiate(MoveMapPrefab);
 
         if (manager.ActiveMap.FindMassEventPos(StartPosTile, out var pos))
