@@ -14,11 +14,14 @@ public class NPC : CharacterBase
         StartCoroutine(RandomMove());
     }
 
+    public bool DoMovable = true;
     IEnumerator RandomMove()
     {
         var rnd = new System.Random();
         while (true)
         {
+            yield return new WaitWhile(() => !DoMovable);
+            
             yield return new WaitWhile(() => RPGSceneManager.IsPauseScene); //会話直後に移動させなくするためのもの
             
             var waitSecond = WaitSecond * (float)rnd.NextDouble();

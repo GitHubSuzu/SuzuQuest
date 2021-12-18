@@ -14,16 +14,22 @@ public class RPGSceneManager : MonoBehaviour
         _currentCoroutine = StartCoroutine(MovePlayer());
     }
 
-
+    public Menu Menu;
+    public ItemShopMenu ItemShopMenu;
+    public void OpenMenu()
+    {
+        Menu.Open();
+    }
+    
     //次のものを追加
     public bool IsPauseScene
     {
         get
         {
-            return !MessageWindow.IsEndMessage;
+            return !MessageWindow.IsEndMessage || Menu.DoOpen || ItemShopMenu.DoOpen;
         }
     }
-//次のものを修正
+    //次のものを修正
     IEnumerator MovePlayer()
     {
         while(true)
@@ -49,6 +55,11 @@ public class RPGSceneManager : MonoBehaviour
                 }
             }
             yield return new WaitWhile(() => IsPauseScene);
+            
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                OpenMenu();
+            }
         }
     }
 
