@@ -15,27 +15,40 @@ public class RPGSceneManager : MonoBehaviour
     }
 
 
+    //次のものを追加
+    public bool IsPauseScene
+    {
+        get
+        {
+            return !MessageWindow.IsEndMessage;
+        }
+    }
+//次のものを修正
     IEnumerator MovePlayer()
     {
-        while (true)
+        while(true)
         {
             if (GetArrowInput(out var move))
             {
-                var movedPos = Player.Pos + move; //現在地にmoveを加算
+                var movedPos = Player.Pos + move;
                 var massData = ActiveMap.GetMassData(movedPos);
-                Player.SetDir(move);////引数の値によって向きを変更
-                if (massData.isMovable)//動けるのなら(isMovableがtrue)
+                Player.SetDir(move);
+                if(massData.isMovable)
                 {
-                    Player.Pos = movedPos;//プレイヤーの位置をmovedPosにする
-                    yield return new WaitWhile(() => Player.IsMoving);//yield return new WaitWhile(条件) : 条件がfalseで再開
-
-                    if (massData.massEvent != null)//nullじゃなかったら呼び出す
+                    Player.Pos = movedPos;
+                    yield return new WaitWhile(() => Player.IsMoving);
+ 
+                    if(massData.massEvent != null)
                     {
                         massData.massEvent.Exec(this);
                     }
                 }
+                else if(massData.character != null && massData.character.Event != null)
+                {
+                    massData.character.Event.Exec(this);
+                }
             }
-            yield return null;
+            yield return new WaitWhile(() => IsPauseScene);
         }
     }
 
@@ -62,5 +75,15 @@ public class RPGSceneManager : MonoBehaviour
             move.y -= 1; doMove = true;
         }
         return doMove;
+    }
+    
+    //RPGSceneManager.cs 会話内容を表示するための処理を追加
+    //次のものを追加（中身は後で記述）
+    //RPGSceneManager.cs 会話内容を表示するための処理を追加
+//次の部分を修正
+    public MessageWindow MessageWindow;
+    public void ShowMessageWindow(string message)
+    {
+        MessageWindow.StartMessage(message);
     }
 }

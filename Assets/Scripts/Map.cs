@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Map : MonoBehaviour
 {
-    public Grid Grid { get => GetComponent<Grid>(); } //Girdを取得
-    Dictionary<string, Tilemap> _tilemaps;            //タイルマップのDictionaryクラス
+    public Grid Grid { get => GetComponent<Grid>(); }
+    Dictionary<string, Tilemap> _tilemaps;
 
     readonly static string BACKGROND_TILEMAP_NAME = "BackGround";
     readonly static string NONE_OBJECTS_TILEMAP_NAME = "NoneObjects";
@@ -14,9 +15,24 @@ public class Map : MonoBehaviour
     readonly static string EVENT_BOX_TILEMAP_NAME = "EventBox";
 
     [SerializeField] List<MassEvent> _massEvents;
+
+    HashSet<CharacterBase> _characters = new HashSet<CharacterBase>();
+    public void AddCharacter(CharacterBase character)
+    {
+        if (!_characters.Contains(character) && character != null)
+        {
+            _characters.Add(character);
+        }
+    }
+
+    public CharacterBase GetCharacter(Vector3Int pos)
+    {
+        return _characters.FirstOrDefault(_c => _c.Pos == pos);
+    }
+
     public MassEvent FindMassEvent(TileBase tile)
     {
-        return _massEvents.Find(_c => _c.Tile == tile);//設定されたListの中の設定されたTileアセットと引数で取得したtileが同じだったら返す
+        return _massEvents.Find(_c => _c.Tile == tile);
     }
     public bool FindMassEventPos(TileBase tile, out Vector3Int pos)
     {
@@ -38,19 +54,21 @@ public class Map : MonoBehaviour
 
     private void Awake()
     {
-        _tilemaps = new Dictionary<string, Tilemap>();//タイルマップのDictionaryクラス
-        foreach (var tilemap in Grid.GetComponentsInChildren<Tilemap>())//Gridの子のTilemapコンポーネントを持つオブジェクトを格納
+        _tilemaps = new Dictionary<string, Tilemap>();
+        foreach (var tilemap in Grid.GetComponentsInChildren<Tilemap>())
         {
-            _tilemaps.Add(tilemap.name, tilemap);//Tilemapコンポーネントを持つオブジェクト名を格納
+            _tilemaps.Add(tilemap.name, tilemap);
         }
 
         //EventBoxを非表示にする
         _tilemaps[EVENT_BOX_TILEMAP_NAME].gameObject.SetActive(false);
+
+        AddCharacter(Object.FindObjectOfType<Player>());
     }
 
     public Vector3 GetWorldPos(Vector3Int pos)
     {
-        return Grid.CellToWorld(pos); //引数：Vector3 セル位置のワールド位置
+        return Grid.CellToWorld(pos);
     }
 
     public class Mass
@@ -58,24 +76,30 @@ public class Map : MonoBehaviour
         public bool isMovable;
         public TileBase eventTile;
         public MassEvent massEvent;
+        public CharacterBase character;
     }
     public Mass GetMassData(Vector3Int pos)
     {
         var mass = new Mass();
-        mass.eventTile = _tilemaps[EVENT_BOX_TILEMAP_NAME].GetTile(pos);//タイルマップ上のタイルの位置
-        mass.isMovable = true;//動ける
-        
-        if (mass.eventTile != null)
+        mass.eventTile = _tilemaps[EVENT_BOX_TILEMAP_NAME].GetTile(pos);
+        mass.isMovable = true;
+        mass.character = GetCharacter(pos);
+
+        if (mass.character != null)
+        {
+            mass.isMovable = false;
+        }
+        else if (mass.eventTile != null)
         {
             mass.massEvent = FindMassEvent(mass.eventTile);
         }
         else if (_tilemaps[OBJECTS_TILEMAP_NAME].GetTile(pos))
         {
-            mass.isMovable = false;//動かない
+            mass.isMovable = false;
         }
         else if (_tilemaps[BACKGROND_TILEMAP_NAME].GetTile(pos) == null)
         {
-            mass.isMovable = false;//動けない
+            mass.isMovable = false;
         }
         return mass;
     }
