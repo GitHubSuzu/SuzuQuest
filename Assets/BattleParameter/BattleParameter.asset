@@ -16,7 +16,7 @@ MonoBehaviour:
     HP: 15
     MaxHP: 15
     Attack: 5
-    Defense: 2
+    Defense: 1
     Level: 1
     Exp: 0
     Money: 100
@@ -26,3 +26,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3a79c687cbb2be64195634f739845cb9, type: 2}
     - {fileID: 11400000, guid: 3a79c687cbb2be64195634f739845cb9, type: 2}
     - {fileID: 11400000, guid: 6186cfe63f106fd45bdc8e9e3670070b, type: 2}
+    LimitAttack: 1000
+    LimitDefense: 700
+    LimitHP: 1500

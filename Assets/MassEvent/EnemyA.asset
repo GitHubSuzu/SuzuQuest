@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ee5a5eb4f307a43b38065288bda945, type: 3}
+  m_Name: EnemyA
+  m_EditorClassIdentifier: 
+  Data:
+    HP: 10
+    MaxHP: 10
+    Attack: 5
+    Defense: 1
+    Level: 1
+    Exp: 10
+    Money: 10
+    AttackWeapon: {fileID: 0}
+    DefenseWeapon: {fileID: 0}
+    Items: []
+    LimitAttack: 100
+    LimitDefense: 100
+    LimitHP: 100
+  Name: "\u30F4\u30A1\u30F3\u30D1\u30A4\u30A2"
+  Sprite: {fileID: -3745542791233892450, guid: d7570c65c37e06c449c2bc5bcbf15b67, type: 3}
+  UseEnemyAI: {fileID: 11400000, guid: 1d677f4bc193dac4a810277b09390401, type: 2}

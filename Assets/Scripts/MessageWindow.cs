@@ -49,6 +49,8 @@ public class MessageWindow : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public const string EFFECT_LINE_TEXT = "<ANIMATION>";
+    public Animator[] Effects { get; set; }
     IEnumerator MessageAnimation()
     {
         YesNoMenu.gameObject.SetActive(false);
@@ -74,9 +76,36 @@ public class MessageWindow : MonoBehaviour
 
             if(line == YES_NO_MENU_LINE_TEXT)
             {
+                YesNoMenu.gameObject.SetActive(true);
                 YesNoMenu.Open();
-
                 yield return new WaitWhile(() => YesNoMenu.DoOpen);
+            }
+            else if (line.IndexOf(EFFECT_LINE_TEXT) == 0)
+            {
+                yield return new WaitUntil(() => Input.anyKeyDown);
+
+                var elements = line.Split(' ');
+                if(elements.Length < 3)
+                {
+                    Debug.LogWarning($"Invalid EffectLine... line={line}");
+                    continue;
+                }
+                if (!int.TryParse(elements[1], out int effectIndex))
+                {
+                    Debug.LogWarning($"Fail to parse EffectIndex... line={line}");
+                    continue;
+                }
+
+                var effect = Effects[effectIndex];
+                effect.SetTrigger(elements[2]);
+
+                var canvas = GetComponent<Canvas>();
+                canvas.enabled = false;
+                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => {
+                    return Input.anyKeyDown;
+                });
+                canvas.enabled = true;
             }
             else
             {

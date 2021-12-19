@@ -21,17 +21,22 @@ public class RPGSceneManager : MonoBehaviour
         Menu.Open();
     }
     
+    [SerializeField] public BattleWindow BattleWindow;
+    public Vector3Int MassEventPos { get; private set; }
+    
     //次のものを追加
     public bool IsPauseScene
     {
         get
         {
-            return !MessageWindow.IsEndMessage || Menu.DoOpen || ItemShopMenu.DoOpen;
+            return !MessageWindow.IsEndMessage || Menu.DoOpen || ItemShopMenu.DoOpen || BattleWindow.DoOpen;
         }
     }
     //次のものを修正
+    // RPGSceneManager.cs プレイヤーが移動したらランダムエンカウントするようにする
     IEnumerator MovePlayer()
     {
+        var rnd = new System.Random();
         while(true)
         {
             if (GetArrowInput(out var move))
@@ -43,19 +48,31 @@ public class RPGSceneManager : MonoBehaviour
                 {
                     Player.Pos = movedPos;
                     yield return new WaitWhile(() => Player.IsMoving);
- 
+
                     if(massData.massEvent != null)
                     {
+                        MassEventPos = movedPos;
                         massData.massEvent.Exec(this);
+                    }
+                    else if(ActiveMap.RandomEncount != null)
+                    {
+                        rnd = new System.Random();
+                        var encount = ActiveMap.RandomEncount.Encount(rnd);
+                        if(encount != null)
+                        {
+                            BattleWindow.SetUseEncounter(encount);
+                            BattleWindow.Open();
+                        }
                     }
                 }
                 else if(massData.character != null && massData.character.Event != null)
                 {
+                    MassEventPos = movedPos;
                     massData.character.Event.Exec(this);
                 }
             }
             yield return new WaitWhile(() => IsPauseScene);
-            
+
             if(Input.GetKeyDown(KeyCode.Space))
             {
                 OpenMenu();
