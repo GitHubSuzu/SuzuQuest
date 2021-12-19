@@ -2145,7 +2145,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 265d90b3d881abc4981f847fd6bae56e, type: 3}
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
@@ -2205,7 +2205,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 265d90b3d881abc4981f847fd6bae56e, type: 3}
     m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
@@ -2696,7 +2696,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 265d90b3d881abc4981f847fd6bae56e, type: 3}
     m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
@@ -2783,6 +2783,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: "\u306F\u3044"
       objectReference: {fileID: 0}
+    - target: {fileID: 4173000014479501494, guid: 85efb0a9a6dea9c4a9fd0748ebd14403, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 265d90b3d881abc4981f847fd6bae56e, type: 3}
     - target: {fileID: 4173000014625021132, guid: 85efb0a9a6dea9c4a9fd0748ebd14403, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3404,7 +3408,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 265d90b3d881abc4981f847fd6bae56e, type: 3}
     m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
@@ -5785,6 +5789,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: "\u3044\u3044\u3048"
       objectReference: {fileID: 0}
+    - target: {fileID: 4173000014479501494, guid: 85efb0a9a6dea9c4a9fd0748ebd14403, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 265d90b3d881abc4981f847fd6bae56e, type: 3}
     - target: {fileID: 4173000014625021132, guid: 85efb0a9a6dea9c4a9fd0748ebd14403, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
