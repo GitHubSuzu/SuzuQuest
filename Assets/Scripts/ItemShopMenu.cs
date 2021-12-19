@@ -1,4 +1,3 @@
-//ItemShopMenu.cs ItemShopMenuコンポーネントの作成
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,7 +77,7 @@ public class ItemShopMenu : Menu
         //MessageWindowが閉じた時の操作がMenuコンポーネントの操作と被ってしまうので、回避策として用意したコルーチン
         EnableInput = false;
         var messageWindow = RPGSceneManager.MessageWindow;
-        yield return new WaitWhile( () => messageWindow.gameObject.activeSelf);
+        yield return new WaitWhile(() => messageWindow.gameObject.activeSelf);
         yield return null;
         EnableInput = true;
     }
@@ -90,10 +89,10 @@ public class ItemShopMenu : Menu
         ItemShop = itemShop;
 
         var menuItems = FirstMenuRoot.MenuItems;
-        for (var i=0; i < menuItems.Length; ++i)
+        for (var i = 0; i < menuItems.Length; ++i)
         {
             var menuItem = menuItems[i];
-            if(i < ItemShop.Items.Count)
+            if (i < ItemShop.Items.Count)
             {
                 menuItem.gameObject.SetActive(true);
                 menuItem.Text = ItemShop.Items[i].Name;

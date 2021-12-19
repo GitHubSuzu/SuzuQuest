@@ -1,4 +1,3 @@
-//Menu.cs Menuコンポーネントの本実装
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +9,8 @@ public class Menu : MonoBehaviour
     public MenuRoot FirstMenuRoot;
 
     public bool DoOpen { get => gameObject.activeSelf; }
+
+    public bool EnableInput { get; set; } = true;
     public virtual void Open()
     {
         gameObject.SetActive(true);
@@ -18,7 +19,7 @@ public class Menu : MonoBehaviour
 
     public virtual void Close()
     {
-        while(_menuRootStack.Count > 0)
+        while (_menuRootStack.Count > 0)
         {
             _menuRootStack.Peek().IsActive = false;
             _menuRootStack.Pop();
@@ -45,12 +46,12 @@ public class Menu : MonoBehaviour
     }
 
     Stack<MenuRoot> _menuRootStack;
-    public bool EnableInput { get; set; } = true;
+
     IEnumerator UpdateWhenOpen()
     {
         EnableInput = true;
         var menuRoots = GetComponentsInChildren<MenuRoot>();
-        foreach(var root in menuRoots)
+        foreach (var root in menuRoots)
         {
             root.IsActive = false;
         }
@@ -64,7 +65,7 @@ public class Menu : MonoBehaviour
         while (0 < _menuRootStack.Count)
         {
             var current = _menuRootStack.Peek();
-            if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 current.Index--;
                 ChangeMenuItem(current);
@@ -78,7 +79,7 @@ public class Menu : MonoBehaviour
             {
                 Decide(current);
             }
-            else if(Input.GetKeyDown(KeyCode.Q))
+            else if (Input.GetKeyDown(KeyCode.Q))
             {
                 Cancel(current);
             }
@@ -88,7 +89,7 @@ public class Menu : MonoBehaviour
     }
 
     protected virtual void ChangeMenuItem(MenuRoot menuRoot)
-    {}
+    { }
 
     protected virtual void Decide(MenuRoot current)
     {
@@ -96,7 +97,7 @@ public class Menu : MonoBehaviour
         switch (item.CurrentKind)
         {
             case MenuItem.Kind.NextMenu:
-                if(item.MoveTargetObj.MenuItems.Length > 0)
+                if (item.MoveTargetObj.MenuItems.Length > 0)
                 {
                     item.MoveTargetObj.IsActive = true;
                     _menuRootStack.Push(item.MoveTargetObj);

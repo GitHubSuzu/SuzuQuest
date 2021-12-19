@@ -1,4 +1,3 @@
-//TreasureBoxEvent.cs TreasureBoxEventクラスの実装
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

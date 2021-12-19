@@ -1,29 +1,25 @@
-//MessageWindow.cs 選択肢に対応するように修正
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class MessageWindow : MonoBehaviour
+public class GameClear : MonoBehaviour
 {
-    public const string YES_NO_MENU_LINE_TEXT = "<YESNO>";
+    public const string EFFECT_LINE_TEXT = "<ANIMATION>";
 
-    public string Message = "";
-    public float TextSpeedPerChar = 1000 / 10f;
+    [TextArea(3, 100)] public string Message = "";
+    public float TextSpeedPerChar = 1 / 10f;
     [Min(1)] public float SpeedUpRate = 3f;
-    [Min(1)] public int MaxLineCount = 4;
+    [Min(1)] public int MaxLineCount = 7;
 
-    public bool IsEndMessage { get; private set; } = true;
+    public bool DoOpen { get => gameObject.activeSelf; private set => gameObject.SetActive(value); }
 
-    public YesNoMenu YesNoMenu;
     public string[] Params { get; set; }
+    public Animator[] Effects { get; set; }
 
     Transform TextRoot;
     Text TextTemplate;
-
-    public const string EFFECT_LINE_TEXT = "<ANIMATION>";
-    public Animator[] Effects { get; set; }
 
     private void Awake()
     {
@@ -31,15 +27,13 @@ public class MessageWindow : MonoBehaviour
         TextTemplate = TextRoot.Find("TextTemplate").GetComponent<Text>();
         TextTemplate.gameObject.SetActive(false);
         gameObject.SetActive(false);
-
-        YesNoMenu.gameObject.SetActive(false);
     }
 
     public void StartMessage(string message)
     {
         Message = message;
         StopAllCoroutines();
-        gameObject.SetActive(true);
+        DoOpen = true;
         StartCoroutine(MessageAnimation());
     }
 
@@ -47,15 +41,13 @@ public class MessageWindow : MonoBehaviour
     {
         StopAllCoroutines();
         Params = null;
-        IsEndMessage = true;
-        YesNoMenu.gameObject.SetActive(false);
-        gameObject.SetActive(false);
+        Effects = null;
+        DoOpen = false;
     }
 
     IEnumerator MessageAnimation()
     {
-        YesNoMenu.gameObject.SetActive(false);
-        IsEndMessage = false;
+        DoOpen = true;
         DestroyLineText();
 
         var lines = Message.Split('\n');
@@ -75,13 +67,7 @@ public class MessageWindow : MonoBehaviour
             lineText.text = "";
             textObjs.Add(lineText);
 
-            if (line == YES_NO_MENU_LINE_TEXT)
-            {
-                YesNoMenu.gameObject.SetActive(true);
-                YesNoMenu.Open();
-                yield return new WaitWhile(() => YesNoMenu.DoOpen);
-            }
-            else if (line.IndexOf(EFFECT_LINE_TEXT) == 0)
+            if (line.IndexOf(EFFECT_LINE_TEXT) == 0)
             {
                 yield return new WaitUntil(() => Input.anyKeyDown);
 
@@ -140,7 +126,6 @@ public class MessageWindow : MonoBehaviour
                         }
                         ++i;
                     }
-                    
                     else
                     {
                         lineText.text += line[i];
@@ -152,9 +137,7 @@ public class MessageWindow : MonoBehaviour
         }
 
         yield return new WaitUntil(() => Input.anyKeyDown);
-        Params = null;
-        IsEndMessage = true;
-        gameObject.SetActive(false);
+        Close();
     }
 
     void DestroyLineText()

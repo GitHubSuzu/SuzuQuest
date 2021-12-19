@@ -10,8 +10,13 @@ public class CharacterBase : MonoBehaviour
 
     Coroutine _moveCoroutine;
     [SerializeField] Vector3Int _pos;
-    
+
     public MassEvent Event;
+
+    Vector3Int InitialPos { get; set; }
+    public bool IsActive { get => gameObject.activeSelf; set => gameObject.SetActive(value); }
+    public string IdentityKey { get => $"{gameObject.name}_{GetType().Name}_{InitialPos}"; }
+
     public virtual Vector3Int Pos
     {
         get => _pos;
@@ -36,6 +41,12 @@ public class CharacterBase : MonoBehaviour
     }
     public virtual void SetPosNoCoroutine(Vector3Int pos)
     {
+        if (_moveCoroutine != null)
+        {
+            StopCoroutine(_moveCoroutine);
+            _moveCoroutine = null;
+        }
+
         _pos = pos;
         transform.position = RPGSceneManager.ActiveMap.Grid.CellToWorld(pos);
         MoveCamera();
@@ -107,14 +118,10 @@ public class CharacterBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        SetDirAnimation(_currentDir);
-    }
-
-    protected virtual void Start()
-    {
         if (RPGSceneManager == null) RPGSceneManager = Object.FindObjectOfType<RPGSceneManager>();
 
-        _moveCoroutine = StartCoroutine(MoveCoroutine(Pos));
+        InitialPos = Pos;
+        SetDirAnimation(_currentDir);
 
         var joinedMap = GetJoinedMap();
         if (joinedMap != null)
@@ -125,6 +132,11 @@ public class CharacterBase : MonoBehaviour
         {
             RPGSceneManager.ActiveMap.AddCharacter(this);
         }
+    }
+
+    protected virtual void Start()
+    {
+        _moveCoroutine = StartCoroutine(MoveCoroutine(Pos));
     }
 
     protected void OnValidate()
@@ -159,6 +171,56 @@ public class CharacterBase : MonoBehaviour
     private void MoveCamera()
     {
         if(DoMoveCamera == true) Camera.main.transform.position = transform.position + Vector3.forward * -10 + playerPivot;
+    }
+
+    [System.Serializable]
+    public class InstantSaveData
+    {
+        public string id;
+        public Vector3Int Pos;
+        public Direction Direction;
+
+        public InstantSaveData() { }
+        public InstantSaveData(CharacterBase character)
+        {
+            id = character.IdentityKey;
+            Pos = character.Pos;
+            Direction = character.CurrentDir;
+        }
+    }
+
+    public virtual InstantSaveData GetInstantSaveData()
+    {
+        return new InstantSaveData(this);
+    }
+
+    [System.Serializable]
+    public class SaveData
+    {
+        public string id;
+
+        public SaveData() { }
+        public SaveData(CharacterBase character)
+        {
+            id = character.IdentityKey;
+        }
+    }
+
+    public virtual SaveData GetSaveData()
+    {
+        return null;
+    }
+
+    public virtual void LoadInstantSaveData(string saveDataJson)
+    {
+        var saveData = JsonUtility.FromJson<InstantSaveData>(saveDataJson);
+        SetPosNoCoroutine(saveData.Pos);
+        CurrentDir = saveData.Direction;
+    }
+
+    public virtual void LoadSaveData(string saveDataJson)
+    {
+
     }
 
 }

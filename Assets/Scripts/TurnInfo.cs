@@ -1,4 +1,3 @@
-//TurnInfo.cs TurnInfoクラスの実装
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +7,10 @@ public class TurnInfo
 {
     public string Message;
     public string[] Params;
+    public Animator[] Effects;
 
     public UnityAction DoneCommand;
-    public Animator[] Effects;
+
     public void ShowMessageWindow(MessageWindow messageWindow)
     {
         messageWindow.Params = Params;

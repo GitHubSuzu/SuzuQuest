@@ -1,4 +1,3 @@
-//MenuRoot.cs MenuRootコンポーネント
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

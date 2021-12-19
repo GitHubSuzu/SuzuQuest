@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Boss
   m_EditorClassIdentifier: 
   Data:
-    HP: 100
-    MaxHP: 100
+    HP: 30
+    MaxHP: 30
     Attack: 7
     Defense: 5
     Level: 1

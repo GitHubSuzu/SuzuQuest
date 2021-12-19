@@ -1,4 +1,3 @@
-//BossEvent.cs BossEventクラスの実装
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,13 +27,14 @@ public class BossEvent : MassEvent
 
         yield return new WaitWhile(() => battleWindow.DoOpen);
 
-        if(manager.Player.BattleParameter.HP <= 0)
+        if (manager.Player.BattleParameter.HP <= 0)
         {
-            Debug.Log("Fail Boss Battle...");
+            //Debug.Log("Fail Boss Battle...");
         }
         else
         {
             Boss.Kill();
+            manager.GameClear();
         }
     }
 }

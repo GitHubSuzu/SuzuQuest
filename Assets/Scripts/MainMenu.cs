@@ -40,7 +40,10 @@ public class MainMenu : Menu
         var item = GetItem(player.BattleParameter, index);
         if (item == null || item is Weapon) return;
         item.Use(player.BattleParameter);
-        player.BattleParameter.Items.Remove(item);
+        int offset = 0;
+        if (player.BattleParameter.AttackWeapon != null) offset++;
+        if (player.BattleParameter.DefenseWeapon != null) offset++;
+        player.BattleParameter.Items.RemoveAt(index - offset);
         UpdateUI();
     }
 
@@ -127,6 +130,43 @@ public class MainMenu : Menu
         {
             Description.transform.parent.gameObject.SetActive(false);
         }
+    }
+
+    public void Save()
+    {
+        StartCoroutine(SaveCoroutine());
+    }
+
+    IEnumerator SaveCoroutine()
+    {
+        var saveData = Object.FindObjectOfType<SaveData>();
+        saveData.Save(RPGSceneManager);
+
+        EnableInput = false;
+        RPGSceneManager.MessageWindow.StartMessage("セーブしました。");
+
+        yield return new WaitUntil(() => RPGSceneManager.MessageWindow.IsEndMessage);
+        EnableInput = true;
+    }
+
+    public void Load()
+    {
+        StartCoroutine(LoadCoroutine());
+    }
+
+    IEnumerator LoadCoroutine()
+    {
+        var saveData = Object.FindObjectOfType<SaveData>();
+        saveData.Load(RPGSceneManager);
+
+        yield return new WaitWhile(() => saveData.NowLoading);
+
+        EnableInput = false;
+        RPGSceneManager.MessageWindow.StartMessage(saveData.IsSuccessLoad ? "ロードしました。" : "ロードに失敗しました...");
+
+        yield return new WaitUntil(() => RPGSceneManager.MessageWindow.IsEndMessage);
+        EnableInput = true;
+        Close();
     }
 
 }

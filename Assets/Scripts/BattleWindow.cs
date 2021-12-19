@@ -16,10 +16,15 @@ public class BattleWindow : Menu
 
     [SerializeField] EncounterEnemies UseEncounter;
     public EncounterEnemies Encounter { get; private set; }
+
+    [SerializeField] Animator AttackEffectPrefab;
+    Animator AttackEffect;
+
     public BattleParameterBase Player { get => RPGSceneManager.Player.BattleParameter; }
     public RPGSceneManager GetRPGSceneManager { get => RPGSceneManager; }
-    
+
     public void SetUseEncounter(EncounterEnemies encounter) { UseEncounter = encounter; }
+
     void SetupEnemies()
     {
         foreach (var e in Enemies.MenuItems)
@@ -44,6 +49,9 @@ public class BattleWindow : Menu
     }
     public override void Open()
     {
+        var saveData = Object.FindObjectOfType<SaveData>();
+        saveData.SaveTemporary(RPGSceneManager.ActiveMap);
+
         base.Open();
         MainCommands.Index = 0;
         DoEscape = false;
@@ -128,9 +136,7 @@ public class BattleWindow : Menu
         }
     }
 
-    [SerializeField] Animator AttackEffectPrefab;
-    Animator AttackEffect;
-     public void Attack()
+    public void Attack()
     {
         var enemyIndex = CurrentMenuObj.Index;
         var enemy = Encounter.Enemies[enemyIndex];
@@ -141,14 +147,15 @@ public class BattleWindow : Menu
             ;
         AttackEffect = Object.Instantiate(AttackEffectPrefab, CurrentItem.transform);
         turnInfo.Effects = new Animator[] { AttackEffect };
+
         turnInfo.DoneCommand = () => {
             var player = RPGSceneManager.Player.BattleParameter;
             BattleParameterBase.AttackResult result;
             var doKill = player.AttackTo(enemy.Data, out result);
 
             var messageWindow = RPGSceneManager.MessageWindow;
-            var resultMsg = $"{enemy.Name}に{result.Damage}ダメージを与えた！";
-            if(doKill)
+            var resultMsg = $"{enemy.Name}に{result.Damage}を与えた！";
+            if (doKill)
             {
                 resultMsg += $"\n{enemy.Name}を倒した！!";
                 Encounter.Enemies.RemoveAt(enemyIndex);
@@ -158,70 +165,6 @@ public class BattleWindow : Menu
             messageWindow.StartMessage(resultMsg);
         };
         StartTurn(turnInfo);
-    }
-
-    IEnumerator Turn(TurnInfo turnInfo)
-    {
-        var messageWindow = RPGSceneManager.MessageWindow;
-        turnInfo.ShowMessageWindow(messageWindow);
-        yield return new WaitWhile(() => !messageWindow.IsEndMessage);
-        if (AttackEffect != null) { Object.Destroy(AttackEffect.gameObject); }
-        if (turnInfo.DoneCommand != null) turnInfo.DoneCommand();
-        yield return new WaitWhile(() => !messageWindow.IsEndMessage);
-        UpdateUI();
-
-        if (DoEscape)
-        {
-            yield return new WaitForSeconds(EscapeWaitSecond);
-            Close();
-        }
-        else
-        {
-            foreach (var enemy in Encounter.Enemies)
-            {
-                var info = enemy.BattleAction(this);
-                info.ShowMessageWindow(messageWindow);
-                yield return new WaitWhile(() => !messageWindow.IsEndMessage);
-                if (info.DoneCommand != null) info.DoneCommand();
-                yield return new WaitWhile(() => !messageWindow.IsEndMessage);
-                UpdateUI();
-            }
-        }
-
-        var player = RPGSceneManager.Player.BattleParameter;
-        if(player.HP <= 0)
-        {
-            messageWindow.StartMessage($"負けてしまった...");
-            yield return new WaitWhile(() => !messageWindow.IsEndMessage);
-        }
-        else if(Encounter.Enemies.Count <= 0)
-        {
-            var exp = UseEncounter.Enemies.Sum(_e => _e.Data.Exp);
-            var money = UseEncounter.Enemies.Sum(_e => _e.Data.Money);
-            var msg = $"戦闘に勝った！\n"
-                + $"Exp+{exp}かくとく!\n"
-                + $"お金+${money}かくとく!";
-            messageWindow.StartMessage(msg);
-            yield return new WaitWhile(() => !messageWindow.IsEndMessage);
-            
-            player.Money += money;
-            var prevLevel = player.Level;
-            if(player.GetExp(exp))
-            {
-                msg = $"レベルが上がった！ {prevLevel} -> {player.Level}\n"
-                    + $"  MaxHP -> {player.MaxHP}\n"
-                    + $"  ATK -> {player.AttackPower}\n"
-                    + $"  DEF -> {player.DefensePower}"
-                    ;
-                messageWindow.StartMessage(msg);
-                yield return new WaitWhile(() => !messageWindow.IsEndMessage);
-            }
-            
-            Close();
-        }
-
-        TurnEndProcess();
-        _turnCoroutine = null;
     }
 
     public void Defense()
@@ -283,6 +226,7 @@ public class BattleWindow : Menu
         };
         StartTurn(turnInfo);
     }
+
     void StartTurn(TurnInfo turnInfo)
     {
         if (_turnCoroutine != null) return;
@@ -296,7 +240,70 @@ public class BattleWindow : Menu
     }
 
     Coroutine _turnCoroutine;
-    
+    IEnumerator Turn(TurnInfo turnInfo)
+    {
+        var messageWindow = RPGSceneManager.MessageWindow;
+        turnInfo.ShowMessageWindow(messageWindow);
+        yield return new WaitWhile(() => !messageWindow.IsEndMessage);
+        if (AttackEffect != null) { Object.Destroy(AttackEffect.gameObject); }
+        if (turnInfo.DoneCommand != null) turnInfo.DoneCommand();
+        yield return new WaitWhile(() => !messageWindow.IsEndMessage);
+        UpdateUI();
+
+        if (DoEscape)
+        {
+            yield return new WaitForSeconds(EscapeWaitSecond);
+            Close();
+        }
+        else
+        {
+            foreach (var enemy in Encounter.Enemies)
+            {
+                var info = enemy.BattleAction(this);
+                info.ShowMessageWindow(messageWindow);
+                yield return new WaitWhile(() => !messageWindow.IsEndMessage);
+                if (info.DoneCommand != null) info.DoneCommand();
+                yield return new WaitWhile(() => !messageWindow.IsEndMessage);
+                UpdateUI();
+            }
+        }
+
+        var player = RPGSceneManager.Player.BattleParameter;
+        if (player.HP <= 0)
+        {
+            messageWindow.StartMessage($"負けてしまった...");
+            yield return new WaitWhile(() => !messageWindow.IsEndMessage);
+            Close();
+            
+        }
+        else if (Encounter.Enemies.Count <= 0)
+        {
+            var exp = UseEncounter.Enemies.Sum(_e => _e.Data.Exp);
+            var money = UseEncounter.Enemies.Sum(_e => _e.Data.Money);
+            var msg = $"戦闘に勝った！\n"
+                + $"Exp+{exp}かくとく!\n"
+                + $"お金+${money}かくとく!";
+            messageWindow.StartMessage(msg);
+            yield return new WaitWhile(() => !messageWindow.IsEndMessage);
+
+            player.Money += money;
+            var prevLevel = player.Level;
+            if (player.GetExp(exp))
+            {
+                msg = $"レベルが上がった！ {prevLevel} -> {player.Level}\n"
+                    + $"  MaxHP -> {player.MaxHP}\n"
+                    + $"  ATK -> {player.AttackPower}\n"
+                    + $"  DEF -> {player.DefensePower}"
+                    ;
+                messageWindow.StartMessage(msg);
+                yield return new WaitWhile(() => !messageWindow.IsEndMessage);
+            }
+            Close();
+        }
+
+        TurnEndProcess();
+        _turnCoroutine = null;
+    }
 
     void TurnEndProcess()
     {

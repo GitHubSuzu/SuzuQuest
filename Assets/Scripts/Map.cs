@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using GlobalSaveData = SaveData;
 
 public class Map : MonoBehaviour
 {
     public Grid Grid { get => GetComponent<Grid>(); }
     Dictionary<string, Tilemap> _tilemaps;
-    public RandomEncount RandomEncount;
 
     readonly static string BACKGROND_TILEMAP_NAME = "BackGround";
     readonly static string NONE_OBJECTS_TILEMAP_NAME = "NoneObjects";
@@ -18,6 +18,9 @@ public class Map : MonoBehaviour
     [SerializeField] List<MassEvent> _massEvents;
 
     HashSet<CharacterBase> _characters = new HashSet<CharacterBase>();
+
+    public RandomEncount RandomEncount;
+
     public void AddCharacter(CharacterBase character)
     {
         if (!_characters.Contains(character) && character != null)
@@ -28,7 +31,7 @@ public class Map : MonoBehaviour
 
     public CharacterBase GetCharacter(Vector3Int pos)
     {
-        return _characters.FirstOrDefault(_c => _c.Pos == pos);
+        return _characters.Where(_c => _c.IsActive).FirstOrDefault(_c => _c.Pos == pos);
     }
 
     public MassEvent FindMassEvent(TileBase tile)
@@ -59,6 +62,9 @@ public class Map : MonoBehaviour
         foreach (var tilemap in Grid.GetComponentsInChildren<Tilemap>())
         {
             _tilemaps.Add(tilemap.name, tilemap);
+            var renderer = tilemap.GetComponent<Renderer>();
+            var minCellPos = tilemap.LocalToCell(renderer.bounds.min);
+            var maxCellPos = tilemap.LocalToCell(renderer.bounds.max);
         }
 
         //EventBoxを非表示にする
@@ -104,4 +110,87 @@ public class Map : MonoBehaviour
         }
         return mass;
     }
+
+    [System.Serializable]
+    public class InstantSaveData
+    {
+        public List<string> characters = new List<string>();
+    }
+
+    public InstantSaveData GetInstantSaveData()
+    {
+        var saveData = new InstantSaveData();
+        saveData.characters = _characters.Select(_c => _c.GetInstantSaveData()).Where(_s => _s != null).Select(_s => JsonUtility.ToJson(_s)).ToList();
+        return saveData;
+    }
+
+    [System.Serializable]
+    public class SaveData
+    {
+        public List<string> characters = new List<string>();
+    }
+
+    public SaveData GetSaveData()
+    {
+        var saveData = new SaveData();
+        saveData.characters = _characters.Where(_c => !(_c is Player)).Select(_c => _c.GetSaveData()).Where(_s => _s != null).Select(_s => JsonUtility.ToJson(_s)).ToList();
+        return saveData;
+    }
+
+    public CharacterBase GetCharacterId(string id)
+    {
+        return _characters.FirstOrDefault(_c => _c.IdentityKey == id);
+    }
+
+    public void Load(InstantSaveData saveData)
+    {
+        if (saveData.characters != null)
+        {
+
+            foreach (var json in saveData.characters)
+            {
+                var data = JsonUtility.FromJson<CharacterBase.SaveData>(json);
+                if (data == null) continue;
+
+                var ch = GetCharacterId(data.id);
+                if (ch != null)
+                {
+                    ch.LoadInstantSaveData(json);
+                }
+                else
+                {
+                    Debug.LogError($"Don't found character={data.id}...");
+                }
+            }
+        }
+    }
+
+    public void Load(SaveData saveData)
+    {
+        if (saveData.characters != null)
+        {
+            foreach (var json in saveData.characters)
+            {
+                var data = JsonUtility.FromJson<CharacterBase.SaveData>(json);
+                if (data == null) continue;
+
+                var ch = GetCharacterId(data.id);
+                if (ch != null)
+                {
+                    ch.LoadSaveData(json);
+                }
+                else
+                {
+                    Debug.LogError($"Don't found character={data.id}...");
+                }
+            }
+        }
+    }
+
+    private void Start()
+    {
+        var saveData = Object.FindObjectOfType<GlobalSaveData>();
+        saveData.LoadSaveData(this);
+    }
+
 }

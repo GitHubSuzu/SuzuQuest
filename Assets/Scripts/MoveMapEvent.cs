@@ -6,15 +6,17 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "MassEvent/Move Map")]
 public class MoveMapEvent : MassEvent
 {
-    public Map MoveMapPrefab;        //移動先のMapPrefab
-    public TileBase StartPosTile;    //移動先の開始位置
-    public Direction StartDirection; //移動先の開始位置の向き
+    public Map MoveMapPrefab;
+    public TileBase StartPosTile;
+    public Direction StartDirection;
 
     public override void Exec(RPGSceneManager manager)
     {
-        Destroy(manager.ActiveMap.gameObject);
-        Debug.Log("マップ生成");
-        manager.ActiveMap = Instantiate(MoveMapPrefab);
+        var saveData = Object.FindObjectOfType<SaveData>();
+        saveData.SaveTemporary(manager.ActiveMap);
+
+        Object.Destroy(manager.ActiveMap.gameObject);
+        manager.ActiveMap = Object.Instantiate(MoveMapPrefab);
 
         if (manager.ActiveMap.FindMassEventPos(StartPosTile, out var pos))
         {
