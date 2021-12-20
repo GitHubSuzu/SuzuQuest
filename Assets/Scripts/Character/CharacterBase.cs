@@ -48,9 +48,9 @@ public class CharacterBase : MonoBehaviour
             _moveCoroutine = null;
         }
 
-        _pos = pos;
-        transform.position = RPGSceneManager.ActiveMap.Grid.CellToWorld(pos);
-        MoveCamera();
+        _pos = pos;//プレイヤーの座標をposに
+        transform.position = RPGSceneManager.ActiveMap.Grid.CellToWorld(pos);//セル位置のワールド位置に変換する
+        MoveCamera();//MoveCameraメソッドを呼び出す
     }
     public bool IsMoving { get => _moveCoroutine != null; }
     public bool DoMoveCamera = false;
@@ -66,10 +66,11 @@ public class CharacterBase : MonoBehaviour
             SetDirAnimation(value);
         }
     }
-    public virtual void SetDir(Vector3Int move)
+    public virtual void SetDir(Vector3Int move)//向きの状態
     {
-        if (Mathf.Abs(move.x) > Mathf.Abs(move.y))
+        if (Mathf.Abs(move.x) > Mathf.Abs(move.y))//絶対値による判定
         {
+            //条件演算子: ?の前で比較して後ろが結果 trueの場合は左側、falseの場合は右側
             CurrentDir = move.x > 0 ? Direction.Right : Direction.Left;
         }
         else

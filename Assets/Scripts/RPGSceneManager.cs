@@ -14,11 +14,7 @@ public class RPGSceneManager : MonoBehaviour
 
     [SerializeField] public BattleWindow BattleWindow; //戦闘Script
 
-    public Vector3Int MassEventPos { get; private set; }
-
-    [SerializeField, TextArea(3, 15)] string GameOverMessage = "体力が無くなった...";
-    [SerializeField] Map RespawnMapPrefab; //リスポーンマップScript
-    [SerializeField] Vector3Int RespawnPos; //リスポーン地点
+    public Vector3Int MassEventPos { get; private set; }//Event用座標
 
     public TitleMenu TitleMenu; //タイトルWindowScript
 
@@ -64,47 +60,47 @@ public class RPGSceneManager : MonoBehaviour
             {
                 var movedPos = Player.Pos + move; //プレイヤーの座標にmoveを加算
                 var massData = ActiveMap.GetMassData(movedPos);//移動先のMassを確認
-                Player.SetDir(move);
+                Player.SetDir(move);//向きの状態
                 if (massData.isMovable)//動けるか判定
                 {
                     Player.Pos = movedPos;//プレイヤーの座標をmovedposの座標にする
                     yield return new WaitWhile(() => Player.IsMoving);
 
-                    if (massData.massEvent != null)
+                    if (massData.massEvent != null)//massEventか判定
                     {
-                        MassEventPos = movedPos;
-                        massData.massEvent.Exec(this);
+                        MassEventPos = movedPos;//MassEventPosに座標を格納
+                        massData.massEvent.Exec(this);//MassEventのExceを呼び出す
                     }
 
-                    else if (ActiveMap.RandomEncount != null)
+                    else if (ActiveMap.RandomEncount != null)//RandomEncountがあるか判定
                     {
                         var rnd = new System.Random();
-                        var encount = ActiveMap.RandomEncount.Encount(rnd);
-                        if (encount != null)
+                        var encount = ActiveMap.RandomEncount.Encount(rnd);//出現するEnemyの種類が返ってくる
+                        if (encount != null)//Enemyに遭遇するか判定
                         {
-                            BattleWindow.SetUseEncounter(encount);
-                            BattleWindow.Open();
+                            BattleWindow.SetUseEncounter(encount);//encountに格納されている出現するEnemyの種類を格納
+                            BattleWindow.Open();//BattleWindow.Openメソッドを呼び出す
                         }
                     }
 
                 }
-                else if (massData.character != null && massData.character.Event != null)
+                else if (massData.character != null && massData.character.Event != null)//キャラクター且つイベントだったら
                 {
-                    MassEventPos = movedPos;
-                    massData.character.Event.Exec(this);
+                    MassEventPos = movedPos; //MassEventPosに座標を格納
+                    massData.character.Event.Exec(this); //Character.EventのExceを呼び出す
                 }
             }
             yield return new WaitWhile(() => IsPauseScene);
 
-            if (Player.BattleParameter.HP <= 0)
+            if (Player.BattleParameter.HP <= 0)//HPが0以下か判定
             {
-                StartCoroutine(GameOver());
+                StartCoroutine(GameOver());//GameOverメソッドを呼び出す
                 yield break;
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                OpenMenu();
+                OpenMenu();//OpenMenuメソッドを呼び出す
             }
         }
     }
@@ -147,24 +143,27 @@ public class RPGSceneManager : MonoBehaviour
 
     public void OpenMenu()
     {
-        Menu.Open();
+        Menu.Open();//Menu.Openメソッドを呼び出す
     }
 
+    [SerializeField, TextArea(3, 15)] string GameOverMessage = "体力が無くなった...";
+    [SerializeField] Map RespawnMapPrefab;  //リスポーンマップScript
+    [SerializeField] Vector3Int RespawnPos; //リスポーン地点の座標
     IEnumerator GameOver()
     {
-        MessageWindow.StartMessage(GameOverMessage);
+        MessageWindow.StartMessage(GameOverMessage);//MessageWindow.StartMessageメソッドを呼び出す
         yield return new WaitUntil(() => MessageWindow.IsEndMessage);
 
-        RespawnMap(true);
+        RespawnMap(true);//RespawnMapメソッドを呼び出す
     }
 
     void RespawnMap(bool isGameOver)
     {
-        Object.Destroy(ActiveMap.gameObject);
-        ActiveMap = Object.Instantiate(RespawnMapPrefab);
+        Destroy(ActiveMap.gameObject);//現在のマップを削除
+        ActiveMap = Instantiate(RespawnMapPrefab);//リスポーンマップを生成
 
-        Player.SetPosNoCoroutine(RespawnPos);
-        Player.CurrentDir = Direction.Down;
+        Player.SetPosNoCoroutine(RespawnPos);//Player.SetPosNoCoroutineメソッドを呼び出す
+        Player.CurrentDir = Direction.Down;//プレイヤーの向きを指定
         if (isGameOver)
         {
             Player.BattleParameter.HP = 1;
@@ -182,20 +181,20 @@ public class RPGSceneManager : MonoBehaviour
     {
         StopCoroutine(_currentCoroutine);
 
-        _currentCoroutine = StartCoroutine(GameClearCoroutine());
+        _currentCoroutine = StartCoroutine(GameClearCoroutine());//GameClearCoroutineメソッドを呼び出す
     }
 
     [SerializeField, TextArea(3, 15)] string GameClearMessage = "ゲームクリアー";
     [SerializeField] GameClear gameClearObj;
     IEnumerator GameClearCoroutine()
     {
-        MessageWindow.StartMessage(GameClearMessage);
+        MessageWindow.StartMessage(GameClearMessage);//MessageWindow.StartMessageメソッドを呼び出す
         yield return new WaitUntil(() => MessageWindow.IsEndMessage);
 
-        gameClearObj.StartMessage(gameClearObj.Message);
+        gameClearObj.StartMessage(gameClearObj.Message);//gameClearObj.StartMessageメソッドを呼び出す
         yield return new WaitWhile(() => gameClearObj.DoOpen);
 
         _currentCoroutine = null;
-        RespawnMap(false);
+        RespawnMap(false);//RespawnMapメソッドを呼び出す
     }
 }
