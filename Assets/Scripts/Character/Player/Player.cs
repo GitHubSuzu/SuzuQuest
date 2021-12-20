@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Direction
+public enum Direction //向きの状態
 {
     Up,
     Down,

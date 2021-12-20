@@ -19,10 +19,11 @@ public class CharacterBase : MonoBehaviour
 
     public virtual Vector3Int Pos
     {
-        get => _pos;
+        get => _pos;//プレイヤーの座標取得
         set
         {
-            if (_pos == value) return;
+            //valueには他のScriptから代入された値が自動的に入る 例：Player.Pos = movedPos;
+            if (_pos == value) return; //現在の座標とvalueの値が同じだったら(動いていない)returnで返す
 
             if (RPGSceneManager.ActiveMap == null)
             {

@@ -85,26 +85,26 @@ public class Map : MonoBehaviour
         public MassEvent massEvent;
         public CharacterBase character;
     }
-    public Mass GetMassData(Vector3Int pos)
+    public Mass GetMassData(Vector3Int pos)//引数の座標のマスの確認(タイル名,移動可能か)
     {
         var mass = new Mass();
-        mass.eventTile = _tilemaps[EVENT_BOX_TILEMAP_NAME].GetTile(pos);
-        mass.isMovable = true;
-        mass.character = GetCharacter(pos);
+        mass.eventTile = _tilemaps[EVENT_BOX_TILEMAP_NAME].GetTile(pos); //eventTile取得
+        mass.isMovable = true; //プレイヤーが動けるか
+        mass.character = GetCharacter(pos); //キャラクター取得
 
-        if (mass.character != null)
+        if (mass.character != null)//characterがいるか判定
         {
             mass.isMovable = false;
         }
-        else if (mass.eventTile != null)
+        else if (mass.eventTile != null)//eventTileか判定
         {
             mass.massEvent = FindMassEvent(mass.eventTile);
         }
-        else if (_tilemaps[OBJECTS_TILEMAP_NAME].GetTile(pos))
+        else if (_tilemaps[OBJECTS_TILEMAP_NAME].GetTile(pos))//Objectか判定
         {
             mass.isMovable = false;
         }
-        else if (_tilemaps[BACKGROND_TILEMAP_NAME].GetTile(pos) == null)
+        else if (_tilemaps[BACKGROND_TILEMAP_NAME].GetTile(pos) == null)//BackGroundか判定
         {
             mass.isMovable = false;
         }

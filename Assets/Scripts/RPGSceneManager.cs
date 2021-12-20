@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class RPGSceneManager : MonoBehaviour
 {
-    public Player Player;
-    public Map ActiveMap;
-    public MessageWindow MessageWindow;
-    public Menu Menu;
-    public ItemShopMenu ItemShopMenu;
+    public Player Player; //PlayerScript
+    public Map ActiveMap; //現在のMapScript
+    public MessageWindow MessageWindow; //会話WindowScript
+    public Menu Menu; //メニュー(アイテム,セーブロード)WindowScript
+    public ItemShopMenu ItemShopMenu; //アイテムショップwindowScript
 
     Coroutine _currentCoroutine;
 
-    [SerializeField] public BattleWindow BattleWindow;
+    [SerializeField] public BattleWindow BattleWindow; //戦闘Script
 
     public Vector3Int MassEventPos { get; private set; }
 
     [SerializeField, TextArea(3, 15)] string GameOverMessage = "体力が無くなった...";
-    [SerializeField] Map RespawnMapPrefab;
-    [SerializeField] Vector3Int RespawnPos;
+    [SerializeField] Map RespawnMapPrefab; //リスポーンマップScript
+    [SerializeField] Vector3Int RespawnPos; //リスポーン地点
 
-    public TitleMenu TitleMenu;
+    public TitleMenu TitleMenu; //タイトルWindowScript
 
-    public ItemList ItemList;
+    public ItemList ItemList; //ゲーム内のアイテム管理リストScript
     public void StartTitle()
     {
         StopCurrentCoroutine();
@@ -60,14 +60,14 @@ public class RPGSceneManager : MonoBehaviour
     {
         while (true)
         {
-            if (GetArrowInput(out var move))
+            if (GetArrowInput(out var move))//引数：動く座標(向き) 例：Vector3.x = -1
             {
-                var movedPos = Player.Pos + move;
-                var massData = ActiveMap.GetMassData(movedPos);
+                var movedPos = Player.Pos + move; //プレイヤーの座標にmoveを加算
+                var massData = ActiveMap.GetMassData(movedPos);//移動先のMassを確認
                 Player.SetDir(move);
-                if (massData.isMovable)
+                if (massData.isMovable)//動けるか判定
                 {
-                    Player.Pos = movedPos;
+                    Player.Pos = movedPos;//プレイヤーの座標をmovedposの座標にする
                     yield return new WaitWhile(() => Player.IsMoving);
 
                     if (massData.massEvent != null)
@@ -109,23 +109,23 @@ public class RPGSceneManager : MonoBehaviour
         }
     }
 
-    bool GetArrowInput(out Vector3Int move)
+    bool GetArrowInput(out Vector3Int move)//方向キー入力があった場合tureを返して、動く座標(向き)を返す
     {
         var doMove = false;
         move = Vector3Int.zero;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             move.x -= 1; doMove = true;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
             move.x += 1; doMove = true;
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
             move.y += 1; doMove = true;
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
             move.y -= 1; doMove = true;
         }
