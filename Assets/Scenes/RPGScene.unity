@@ -2097,11 +2097,11 @@ MonoBehaviour:
   Menu: {fileID: 1158626485}
   ItemShopMenu: {fileID: 159875239}
   BattleWindow: {fileID: 1883097135}
+  TitleMenu: {fileID: 819556901}
+  ItemList: {fileID: 11400000, guid: aadee878907ba174c9a2510ffd49f783, type: 2}
   GameOverMessage: "\u4F53\u529B\u304C\u7121\u304F\u306A\u3063\u305F..."
   RespawnMapPrefab: {fileID: -2606498570178970419, guid: 6108a033ff226d54888dca094825c44b, type: 3}
   RespawnPos: {x: -8, y: -2, z: 0}
-  TitleMenu: {fileID: 819556901}
-  ItemList: {fileID: 11400000, guid: aadee878907ba174c9a2510ffd49f783, type: 2}
   GameClearMessage: "\u30B2\u30FC\u30E0\u30AF\u30EA\u30A2\u30FC"
   gameClearObj: {fileID: 513601547}
 --- !u!4 &467134431
